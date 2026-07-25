@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "tracking": false,
+  "dataUsages": [
+    {
+      "category": "PRODUCT_INTERACTION",
+      "purposes": ["ANALYTICS", "APP_FUNCTIONALITY"],
+      "dataProtections": ["DATA_NOT_LINKED_TO_YOU"]
+    },
+    {
+      "category": "CRASH_DATA",
+      "purposes": ["ANALYTICS", "APP_FUNCTIONALITY"],
+      "dataProtections": ["DATA_NOT_LINKED_TO_YOU"]
+    },
+    {
+      "category": "PERFORMANCE_DATA",
+      "purposes": ["ANALYTICS", "APP_FUNCTIONALITY"],
+      "dataProtections": ["DATA_NOT_LINKED_TO_YOU"]
+    },
+    {
+      "category": "DEVICE_ID",
+      "purposes": ["ANALYTICS", "APP_FUNCTIONALITY"],
+      "dataProtections": ["DATA_NOT_LINKED_TO_YOU"]
+    }
+  ]
+}
