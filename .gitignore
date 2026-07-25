@@ -1,0 +1,13 @@
+
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+Brinkball.xcodeproj/
+assets/*.mobileprovision
+*.log
+.claude/
+
+# Firebase client config is intentionally excluded from this repo.
+Brinkball/Resources/GoogleService-Info.plist

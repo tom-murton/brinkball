@@ -1,0 +1,81 @@
+name: Brinkball
+
+options:
+  bundleIdPrefix: com.tommurton
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: 5R8P82H779
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    MARKETING_VERSION: "1.1"
+    CURRENT_PROJECT_VERSION: "2"
+    ENABLE_USER_SCRIPT_SANDBOXING: false
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
+
+targets:
+  Brinkball:
+    type: application
+    platform: iOS
+    sources:
+      - path: Brinkball/Sources
+      - path: Brinkball/Resources
+        excludes:
+          - Info.plist
+    dependencies:
+      - package: Firebase
+        products:
+          - FirebaseAnalyticsWithoutAdIdSupport
+          - FirebaseCrashlytics
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        script: |
+          "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+        inputFiles:
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist
+          - $(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)
+        basedOnDependencyAnalysis: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tommurton.brinkball
+        PRODUCT_NAME: Brinkball
+        PRODUCT_MODULE_NAME: Brinkball
+        INFOPLIST_FILE: Brinkball/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Brinkball/Brinkball.entitlements
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: false
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        OTHER_LDFLAGS: "$(inherited) -ObjC"
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: Brinkball App Store
+
+  BrinkballTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: BrinkballTests
+    dependencies:
+      - target: Brinkball
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tommurton.brinkball.tests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Brinkball.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brinkball
+        BUNDLE_LOADER: $(TEST_HOST)
